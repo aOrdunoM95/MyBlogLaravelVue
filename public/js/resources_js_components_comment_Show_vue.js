@@ -128,7 +128,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      isVisible: false,
+      id: null,
+      isVisible: 0,
       comments: [],
       comment: {
         us_name: "",
@@ -140,7 +141,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     var _this = this;
 
-    this.axios.get('/api/comment').then(function (response) {
+    this.id = this._uid, this.axios.get('/api/comment').then(function (response) {
       console.log(response.data);
       _this.comments = response.data;
     })["catch"](function (error) {
@@ -211,14 +212,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    chatVisible: function chatVisible() {
-      if (!this.isVisible) {
-        this.isVisible = true;
-      } else {
-        this.isVisible = false;
-      }
-
-      console.log(this.isVisible);
+    chatVisible: function chatVisible(id) {
+      this.isVisible = id;
     },
     cancel: function cancel() {
       this.comment.content = '';
@@ -1551,14 +1546,19 @@ var render = function () {
                     "button",
                     {
                       staticClass: "comment__button",
-                      on: { click: _vm.chatVisible },
+                      on: {
+                        click: function ($event) {
+                          return _vm.chatVisible(comment.principal.id)
+                        },
+                      },
                     },
                     [_vm._v("Reply")]
                   ),
                   _vm._v(" "),
-                  !_vm.isVisible
+                  _vm.isVisible == 0
                     ? _c("div")
-                    : _c("div", [
+                    : _vm.isVisible == comment.principal.id
+                    ? _c("div", { attrs: { id: comment.principal.id } }, [
                         _vm.chatVisible
                           ? _c(
                               "form",
@@ -1724,7 +1724,11 @@ var render = function () {
                                           staticClass:
                                             "btn btn-outline-primary btn-sm ml-1 shadow-none",
                                           attrs: { type: "button" },
-                                          on: { click: _vm.chatVisible },
+                                          on: {
+                                            click: function ($event) {
+                                              _vm.isVisible = 0
+                                            },
+                                          },
                                         },
                                         [_vm._v("Cancel")]
                                       ),
@@ -1734,7 +1738,8 @@ var render = function () {
                               ]
                             )
                           : _vm._e(),
-                      ]),
+                      ])
+                    : _vm._e(),
                 ]),
                 _vm._v(" "),
                 _vm._l(comment.subcomments, function (subcomments) {

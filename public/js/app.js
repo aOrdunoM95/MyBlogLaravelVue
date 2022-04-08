@@ -2147,17 +2147,12 @@ var Show = function Show() {
   return __webpack_require__.e(/*! import() */ "resources_js_components_comment_Show_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/comment/Show.vue */ "./resources/js/components/comment/Show.vue"));
 };
 
-var Create = function Create() {
-  return Promise.resolve().then(function webpackMissingModule() { var e = new Error("Cannot find module './components/comment/Create.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; });
-};
-
 var routes = [{
   name: 'home',
   path: '/',
   components: {
     Home: Home,
-    Show: Show,
-    Create: Create
+    Show: Show
   }
 }];
 
