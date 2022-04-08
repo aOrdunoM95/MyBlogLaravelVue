@@ -14,8 +14,22 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::orderBy('created_at', 'desc')->get();
-        return response()->json($comments);
+        $comments = Comment::orderBy('created_at', 'desc')->WhereNull('sub_comment_id')->get();
+
+        foreach ($comments as $comment) {
+            $subComments = Comment::where('sub_comment_id', $comment->id)->get();
+
+            $comments = collect([
+                'principal' => $comment,
+                'subcomments' => $subComments
+            ]);
+
+            $items[] = $comments;
+        }
+
+
+
+        return response()->json($items);
     }
 
     /**

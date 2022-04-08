@@ -9,7 +9,7 @@
             </div>
         </nav>
 
-        <div>
+        <div class="bg-white">
             <router-view class="mt-3" name="Home"></router-view>
             <router-view class="mt-3" name="Show"> </router-view>
             <!-- <router-view class="mb-3" name="Create"> </router-view> -->
