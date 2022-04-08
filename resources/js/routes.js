@@ -1,7 +1,6 @@
 const Home = ()=> import('./components/Home.vue');
 
 const Show = ()=> import('./components/comment/Show.vue');
-const Create = ()=> import('./components/comment/Create.vue');
 
 export const routes = [
     {
@@ -9,8 +8,7 @@ export const routes = [
         path: '/',
         components: {
             Home: Home,
-            Show: Show,
-            Create: Create
+            Show: Show
         }
     },
 ]

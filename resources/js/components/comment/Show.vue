@@ -13,10 +13,10 @@
                             <div class="mt-2">
                                 <p class="fs-11">{{ comment.principal.content }}</p>
                             </div>
-                            <button class="comment__button" @click="chatVisible">Reply</button>
+                            <button class="comment__button" @click="chatVisible(comment.principal.id)">Reply</button>
 
-                            <div v-if="!isVisible"></div>
-                            <div v-else>
+                            <div v-if="isVisible == 0"></div>
+                            <div :id="comment.principal.id" v-else-if="isVisible == comment.principal.id">
                                 <form v-if="chatVisible" @submit.prevent="replyComment(comment.principal.id)">
                                     <div class="bg-light p-2">
                                         <div class="d-flex flex-row align-items-start">
@@ -37,7 +37,7 @@
                                         </div>
                                         <div class="mt-2 text-right">
                                             <button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button>
-                                            <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" @click="chatVisible" type="button">Cancel</button>
+                                            <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" @click="isVisible = 0" type="button">Cancel</button>
                                         </div>
                                     </div>
                                 </form>
@@ -97,7 +97,8 @@
 export default {
     data() {
         return {
-            isVisible: false,
+            id: null,
+            isVisible: 0,
             comments: [],
             comment: {
                 us_name: "",
@@ -108,6 +109,7 @@ export default {
         }
     },
     mounted() {
+        this.id = this._uid,
         this.axios.get('/api/comment')
             .then(response => {
                 console.log(response.data)
@@ -152,14 +154,8 @@ export default {
                     console.log(error)
                 })
         },
-        chatVisible() {
-
-            if(!this.isVisible) {
-                this.isVisible = true
-            } else {
-                this.isVisible = false
-            }
-            console.log(this.isVisible)
+        chatVisible(id) {
+            this.isVisible = id
         },
         cancel() {
             this.comment.content = ''
