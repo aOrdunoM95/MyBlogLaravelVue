@@ -89,13 +89,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      isVisible: false,
       comments: [],
       comment: {
         us_name: "",
-        content: ""
+        content: "",
+        sub_comment_id: ""
       }
     };
   },
@@ -106,7 +144,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       console.log(response.data);
       _this.comments = response.data;
     })["catch"](function (error) {
-      _this.comment = [];
+      console.log(error);
     });
   },
   methods: {
@@ -120,7 +158,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return _this2.axios.post('/api/comment', _this2.comment).then(function (response) {
-                  _this2.comments.unshift(response.data.blog);
+                  console.log(_this2.comment);
+
+                  _this2.comments.unshift({
+                    principal: response.data.blog
+                  });
 
                   _this2.cancel();
 
@@ -136,6 +178,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    replyComment: function replyComment(comment_id) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this3.comments.sub_comment_id = comment_id;
+                _context2.next = 3;
+                return _this3.axios.post('/api/comment', _this3.comment).then(function (response) {
+                  console.log(_this3.comment);
+
+                  _this3.comments.unshift({
+                    principal: response.data.blog
+                  });
+
+                  _this3.cancel();
+
+                  console.log(_this3.comments);
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    chatVisible: function chatVisible() {
+      if (!this.isVisible) {
+        this.isVisible = true;
+      } else {
+        this.isVisible = false;
+      }
+
+      console.log(this.isVisible);
     },
     cancel: function cancel() {
       this.comment.content = '';
@@ -163,7 +246,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbody {\n    background: #eee\n}\n.date {\n    font-size: 11px\n}\n.comment-text {\n    font-size: 12px\n}\n.fs-12 {\n    font-size: 12px\n}\n.shadow-none {\n    box-shadow: none\n}\n.name {\n    color: #007bff\n}\n.cursor:hover {\n    color: blue\n}\n.cursor {\n    cursor: pointer\n}\n.textarea {\n    resize: none\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.shadow-none {\n    box-shadow: none\n}\n.name {\n    color: #007bff\n}\n.cursor:hover {\n    color: blue\n}\n.cursor {\n    cursor: pointer\n}\n.textarea {\n    resize: none\n}\n.comment__button {\n  display: block;\n  color: #1976d2;\n  font-size: 12px;\n  margin: 5px 0;\n  padding: 0;\n  border: 0;\n  cursor: pointer;\n}\n.comment {\n  margin: 20px 0;\n  padding-left: 10px;\n  list-style: none;\n  border-left: 2px solid #eee;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1424,198 +1507,393 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("main", [
     _c("div", { staticClass: "container mt-5" }, [
-      _c("div", { staticClass: "d-flex justify-content-center row" }, [
-        _c(
-          "div",
-          { staticClass: "col-md-8" },
-          [
-            _vm._l(_vm.comments, function (comment) {
-              return _c(
-                "div",
-                {
-                  key: comment.id,
-                  staticClass: "d-flex flex-column comment-section",
-                },
-                [
-                  _c("div", { staticClass: "bg-white p-2" }, [
-                    _c("div", { staticClass: "d-flex flex-row user-info" }, [
-                      _c("img", {
-                        staticClass: "rounded-circle",
-                        attrs: {
-                          src: "https://i.imgur.com/RpzrMR2.jpg",
-                          width: "40",
-                        },
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "d-flex flex-column justify-content-start ml-2",
-                        },
-                        [
-                          _c(
-                            "span",
-                            { staticClass: "d-block font-weight-bold name" },
-                            [_vm._v(_vm._s(comment.us_name))]
-                          ),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "date text-black-50" }, [
-                            _vm._v("Shared - Jan 2020"),
-                          ]),
-                        ]
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "mt-2" }, [
-                      _c("p", { staticClass: "comment-text" }, [
-                        _vm._v(_vm._s(comment.content)),
-                      ]),
+      _c(
+        "div",
+        { staticClass: "d-flex justify-content-center row" },
+        [
+          _vm._l(_vm.comments, function (comment) {
+            return _c(
+              "li",
+              {
+                key: comment.id,
+                staticClass: "d-flex flex-column comment-section comment",
+              },
+              [
+                _c("div", { staticClass: "p-2" }, [
+                  _c("div", { staticClass: "d-flex flex-row user-info" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "d-flex flex-column justify-content-start ml-2",
+                      },
+                      [
+                        _c(
+                          "span",
+                          { staticClass: "d-block font-weight-bold name" },
+                          [_vm._v(_vm._s(comment.principal.us_name))]
+                        ),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "fs-12 text-black-50" }, [
+                          _vm._v("Shared - Jan 2020"),
+                        ]),
+                      ]
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("p", { staticClass: "fs-11" }, [
+                      _vm._v(_vm._s(comment.principal.content)),
                     ]),
                   ]),
                   _vm._v(" "),
-                  _vm._m(0, true),
-                ]
-              )
-            }),
-            _vm._v(" "),
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function ($event) {
-                    $event.preventDefault()
-                    return _vm.create.apply(null, arguments)
-                  },
-                },
-              },
-              [
-                _c("div", { staticClass: "bg-light p-2" }, [
                   _c(
-                    "div",
-                    { staticClass: "d-flex flex-row align-items-start" },
-                    [
-                      _c("img", {
-                        staticClass: "rounded-circle",
-                        attrs: {
-                          src: "https://i.imgur.com/RpzrMR2.jpg",
-                          width: "40",
-                        },
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "card-body" }, [
-                        _c(
-                          "form",
-                          {
-                            on: {
-                              submit: function ($event) {
-                                $event.preventDefault()
-                                return _vm.create.apply(null, arguments)
+                    "button",
+                    {
+                      staticClass: "comment__button",
+                      on: { click: _vm.chatVisible },
+                    },
+                    [_vm._v("Reply")]
+                  ),
+                  _vm._v(" "),
+                  !_vm.isVisible
+                    ? _c("div")
+                    : _c("div", [
+                        _vm.chatVisible
+                          ? _c(
+                              "form",
+                              {
+                                on: {
+                                  submit: function ($event) {
+                                    $event.preventDefault()
+                                    return _vm.replyComment(
+                                      comment.principal.id
+                                    )
+                                  },
+                                },
                               },
-                            },
+                              [
+                                _c("div", { staticClass: "bg-light p-2" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "d-flex flex-row align-items-start",
+                                    },
+                                    [
+                                      _c("div", { staticClass: "card-body" }, [
+                                        _c(
+                                          "form",
+                                          {
+                                            on: {
+                                              submit: function ($event) {
+                                                $event.preventDefault()
+                                                return _vm.create.apply(
+                                                  null,
+                                                  arguments
+                                                )
+                                              },
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "form-floating mb-3",
+                                              },
+                                              [
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value: comment.us_name,
+                                                      expression:
+                                                        "comment.us_name",
+                                                    },
+                                                  ],
+                                                  staticClass: "form-control",
+                                                  attrs: {
+                                                    type: "text",
+                                                    id: "floatingInput",
+                                                  },
+                                                  domProps: {
+                                                    value: comment.us_name,
+                                                  },
+                                                  on: {
+                                                    input: function ($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.$set(
+                                                        comment,
+                                                        "us_name",
+                                                        $event.target.value
+                                                      )
+                                                    },
+                                                  },
+                                                }),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "label",
+                                                  {
+                                                    attrs: {
+                                                      for: "floatingInput",
+                                                    },
+                                                  },
+                                                  [_vm._v("User Name")]
+                                                ),
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "form-floating" },
+                                              [
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value: comment.content,
+                                                      expression:
+                                                        "comment.content",
+                                                    },
+                                                  ],
+                                                  staticClass: "form-control",
+                                                  attrs: {
+                                                    type: "text",
+                                                    id: "floatingPassword",
+                                                  },
+                                                  domProps: {
+                                                    value: comment.content,
+                                                  },
+                                                  on: {
+                                                    input: function ($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.$set(
+                                                        comment,
+                                                        "content",
+                                                        $event.target.value
+                                                      )
+                                                    },
+                                                  },
+                                                }),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "label",
+                                                  {
+                                                    attrs: {
+                                                      for: "floatingPassword",
+                                                    },
+                                                  },
+                                                  [_vm._v("Comment")]
+                                                ),
+                                              ]
+                                            ),
+                                          ]
+                                        ),
+                                      ]),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "mt-2 text-right" },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-primary btn-sm shadow-none",
+                                          attrs: { type: "submit" },
+                                        },
+                                        [_vm._v("Post comment")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-outline-primary btn-sm ml-1 shadow-none",
+                                          attrs: { type: "button" },
+                                          on: { click: _vm.chatVisible },
+                                        },
+                                        [_vm._v("Cancel")]
+                                      ),
+                                    ]
+                                  ),
+                                ]),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]),
+                ]),
+                _vm._v(" "),
+                _vm._l(comment.subcomments, function (subcomments) {
+                  return _c(
+                    "ul",
+                    { key: subcomments.id, staticClass: "comment" },
+                    [
+                      _c("div", { staticClass: "d-flex flex-row user-info" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "d-flex flex-column justify-content-start ml-2",
                           },
                           [
-                            _c("div", { staticClass: "form-floating mb-3" }, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.comment.us_name,
-                                    expression: "comment.us_name",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text", id: "floatingInput" },
-                                domProps: { value: _vm.comment.us_name },
-                                on: {
-                                  input: function ($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.comment,
-                                      "us_name",
-                                      $event.target.value
-                                    )
-                                  },
-                                },
-                              }),
-                              _vm._v(" "),
-                              _c("label", { attrs: { for: "floatingInput" } }, [
-                                _vm._v("User Name"),
-                              ]),
-                            ]),
+                            _c(
+                              "span",
+                              { staticClass: "d-block font-weight-bold name" },
+                              [_vm._v(_vm._s(subcomments.us_name))]
+                            ),
                             _vm._v(" "),
-                            _c("div", { staticClass: "form-floating" }, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.comment.content,
-                                    expression: "comment.content",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text", id: "floatingPassword" },
-                                domProps: { value: _vm.comment.content },
-                                on: {
-                                  input: function ($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.comment,
-                                      "content",
-                                      $event.target.value
-                                    )
-                                  },
-                                },
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                { attrs: { for: "floatingPassword" } },
-                                [_vm._v("Comment")]
-                              ),
+                            _c("span", { staticClass: "fs-12 text-black-50" }, [
+                              _vm._v("Shared - Jan 2020"),
                             ]),
                           ]
                         ),
                       ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-2" }, [
+                        _c("p", { staticClass: "fs-11" }, [
+                          _vm._v(_vm._s(subcomments.content)),
+                        ]),
+                      ]),
                     ]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(1),
-                ]),
-              ]
-            ),
-          ],
-          2
-        ),
-      ]),
+                  )
+                }),
+              ],
+              2
+            )
+          }),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.create.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("div", { staticClass: "bg-light p-2" }, [
+                _c(
+                  "div",
+                  { staticClass: "d-flex flex-row align-items-start" },
+                  [
+                    _c("img", {
+                      staticClass: "rounded-circle",
+                      attrs: {
+                        src: "https://i.imgur.com/RpzrMR2.jpg",
+                        width: "40",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c(
+                        "form",
+                        {
+                          on: {
+                            submit: function ($event) {
+                              $event.preventDefault()
+                              return _vm.create.apply(null, arguments)
+                            },
+                          },
+                        },
+                        [
+                          _c("div", { staticClass: "form-floating mb-3" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.comment.us_name,
+                                  expression: "comment.us_name",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text", id: "floatingInput" },
+                              domProps: { value: _vm.comment.us_name },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.comment,
+                                    "us_name",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("label", { attrs: { for: "floatingInput" } }, [
+                              _vm._v("User Name"),
+                            ]),
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-floating" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.comment.content,
+                                  expression: "comment.content",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text", id: "floatingPassword" },
+                              domProps: { value: _vm.comment.content },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.comment,
+                                    "content",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              { attrs: { for: "floatingPassword" } },
+                              [_vm._v("Comment")]
+                            ),
+                          ]),
+                        ]
+                      ),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+              ]),
+            ]
+          ),
+        ],
+        2
+      ),
     ]),
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white" }, [
-      _c("div", { staticClass: "d-flex flex-row fs-12" }, [
-        _c("div", { staticClass: "like p-2 cursor" }, [
-          _c("i", {
-            staticClass: "fa fa-comment",
-            attrs: { "aria-hidden": "true" },
-          }),
-          _c("span", { staticClass: "ml-1" }, [_vm._v("Comment")]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("hr"),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

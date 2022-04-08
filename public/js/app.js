@@ -19673,6 +19673,7 @@ var render = function () {
     _vm._v(" "),
     _c(
       "div",
+      { staticClass: "bg-white" },
       [
         _c("router-view", { staticClass: "mt-3", attrs: { name: "Home" } }),
         _vm._v(" "),

@@ -43,40 +43,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "create-comment",
   data: function data() {
     return {
+      comments: [],
       comment: {
         us_name: "",
         content: ""
       }
     };
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.axios.get('/api/comment').then(function (response) {
+      console.log(response.data);
+      _this.comments = response.data;
+    })["catch"](function (error) {
+      _this.comment = [];
+    });
+  },
   methods: {
     create: function create() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -84,10 +73,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.axios.post('/api/comment', _this.comment).then(function (response) {
-                  _this.$router.push({
-                    name: showComments
-                  });
+                return _this2.axios.post('/api/comment', _this2.comment).then(function (response) {
+                  _this2.comments.unshift(response.data.blog);
+
+                  _this2.cancel();
+
+                  console.log(_this2.comments);
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -99,6 +90,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    cancel: function cancel() {
+      this.comment.content = '';
+      this.comment.us_name = '';
     }
   }
 });
@@ -957,87 +952,29 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container mt-4" }, [
-    _c("div", { staticClass: "row d-flex justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("h4", [_vm._v("Add your comment")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card p-3" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function ($event) {
-                    $event.preventDefault()
-                    return _vm.create.apply(null, arguments)
-                  },
-                },
-              },
-              [
-                _c("div", { staticClass: "form-floating mb-3" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.comment.us_name,
-                        expression: "comment.us_name",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", id: "floatingInput" },
-                    domProps: { value: _vm.comment.us_name },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.comment, "us_name", $event.target.value)
-                      },
-                    },
-                  }),
-                  _vm._v(" "),
-                  _c("label", { attrs: { for: "floatingInput" } }, [
-                    _vm._v("User Name"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-floating" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.comment.content,
-                        expression: "comment.content",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", id: "floatingPassword" },
-                    domProps: { value: _vm.comment.content },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.comment, "content", $event.target.value)
-                      },
-                    },
-                  }),
-                  _vm._v(" "),
-                  _c("label", { attrs: { for: "floatingPassword" } }, [
-                    _vm._v("Comment"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _vm._m(0),
-              ]
-            ),
-          ]),
-        ]),
-      ]),
+  return _c("li", { staticClass: "comment" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("span", { staticClass: "comment__text" }, [
+      _vm._v(
+        "adsjbhjdsadasodjsiodsoajsapdasjpdoasjmdsapdosadpsoadjaspodjpsoajd"
+      ),
     ]),
+    _vm._v(" "),
+    _c("button", { staticClass: "comment__button" }, [_vm._v("Reply")]),
+    _vm._v(" "),
+    _vm.comment.children.length > 0
+      ? _c(
+          "ul",
+          _vm._l(_vm.comment.children, function (childComment) {
+            return _c("comment", {
+              key: childComment.id,
+              attrs: { comment: childComment },
+            })
+          }),
+          1
+        )
+      : _vm._e(),
   ])
 }
 var staticRenderFns = [
@@ -1045,12 +982,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 mt-3" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Save")]
-      ),
+    return _c("span", { staticClass: "comment__metadata" }, [
+      _c("strong", [_vm._v("email@email")]),
+      _vm._v(" • "),
+      _c("span", [_vm._v("12/02/2022")]),
     ])
   },
 ]
