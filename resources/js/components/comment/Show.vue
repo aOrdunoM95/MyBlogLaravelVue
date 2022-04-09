@@ -17,18 +17,18 @@
 
                             <div v-if="isVisible == 0"></div>
                             <div :id="comment.principal.id" v-else-if="isVisible == comment.principal.id">
-                                <form v-if="chatVisible" @submit.prevent="replyComment(comment.principal.id)">
+                                <form v-if="chatVisible" @submit.prevent="replyComment">
                                     <div class="bg-light p-2">
                                         <div class="d-flex flex-row align-items-start">
                                                 <div class="card-body">
-                                                    <form @submit.prevent="create">
+                                                    <form @submit.prevent="replyComment">
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" class="form-control" id="floatingInput" v-model="comment.us_name">
+                                                            <input type="text" class="form-control" id="floatingInput" v-model="replay_us_name">
                                                             <label for="floatingInput">User Name</label>
                                                         </div>
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="floatingPassword" v-model="comment.content">
+                                                            <input type="text" class="form-control" id="floatingPassword" v-model="replay_content">
                                                             <label for="floatingPassword">Comment</label>
                                                         </div>
                                                     </form>
@@ -36,7 +36,7 @@
 
                                         </div>
                                         <div class="mt-2 text-right">
-                                            <button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button>
+                                            <button class="btn btn-primary btn-sm shadow-none" type="submit">Post replay</button>
                                             <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" @click="isVisible = 0" type="button">Cancel</button>
                                         </div>
                                     </div>
@@ -100,6 +100,8 @@ export default {
             id: null,
             isVisible: 0,
             comments: [],
+            replay_us_name: '',
+            replay_content: '',
             comment: {
                 us_name: "",
                 content: "",
@@ -112,7 +114,6 @@ export default {
         this.id = this._uid,
         this.axios.get('/api/comment')
             .then(response => {
-                console.log(response.data)
                 this.comments = response.data
             })
             .catch(error => {
@@ -121,40 +122,43 @@ export default {
     },
     methods: {
         async create() {
+            this.comment.sub_comment_id = ""
             await this.axios.post('/api/comment', this.comment)
                 .then(response => {
-
-                    console.log(this.comment)
-
                     this.comments.unshift({principal: response.data.blog})
-
                     this.cancel()
-
-                    console.log(this.comments)
                 })
                 .catch(error => {
                     console.log(error)
                 })
         },
-        async replyComment(comment_id) {
-            this.comments.sub_comment_id = comment_id
+        async replyComment() {
 
-            await this.axios.post('/api/comment', this.comment)
-                .then(response => {
+            await this.axios({
+                method: 'post',
+                url: '/api/comment',
+                data: {
+                    us_name: this.replay_us_name,
+                    content: this.replay_content,
+                    sub_comment_id: this.comment.sub_comment_id
+                }
+            }).then(response => {
+                var arr1 = this.comments.filter(d => d.principal.id == this.comment.sub_comment_id)
+                var pushData = arr1[0].subcomments
 
-                    console.log(this.comment)
+                pushData.unshift(response.data.blog)
 
-                    this.comments.unshift({principal: response.data.blog})
+                this.replay_content = ''
+                this.replay_us_name = ''
 
-                    this.cancel()
 
-                    console.log(this.comments)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            }).catch(error => {
+                console.log(error)
+            })
+
         },
         chatVisible(id) {
+            this.comment.sub_comment_id = id,
             this.isVisible = id
         },
         cancel() {

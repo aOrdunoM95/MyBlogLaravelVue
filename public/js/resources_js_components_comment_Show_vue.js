@@ -131,6 +131,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       id: null,
       isVisible: 0,
       comments: [],
+      replay_us_name: '',
+      replay_content: '',
       comment: {
         us_name: "",
         content: "",
@@ -142,7 +144,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _this = this;
 
     this.id = this._uid, this.axios.get('/api/comment').then(function (response) {
-      console.log(response.data);
       _this.comments = response.data;
     })["catch"](function (error) {
       console.log(error);
@@ -157,22 +158,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _this2.comment.sub_comment_id = "";
+                _context.next = 3;
                 return _this2.axios.post('/api/comment', _this2.comment).then(function (response) {
-                  console.log(_this2.comment);
-
                   _this2.comments.unshift({
                     principal: response.data.blog
                   });
 
                   _this2.cancel();
-
-                  console.log(_this2.comments);
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 2:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -180,7 +178,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    replyComment: function replyComment(comment_id) {
+    replyComment: function replyComment() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -188,23 +186,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this3.comments.sub_comment_id = comment_id;
-                _context2.next = 3;
-                return _this3.axios.post('/api/comment', _this3.comment).then(function (response) {
-                  console.log(_this3.comment);
-
-                  _this3.comments.unshift({
-                    principal: response.data.blog
+                _context2.next = 2;
+                return _this3.axios({
+                  method: 'post',
+                  url: '/api/comment',
+                  data: {
+                    us_name: _this3.replay_us_name,
+                    content: _this3.replay_content,
+                    sub_comment_id: _this3.comment.sub_comment_id
+                  }
+                }).then(function (response) {
+                  var arr1 = _this3.comments.filter(function (d) {
+                    return d.principal.id == _this3.comment.sub_comment_id;
                   });
 
-                  _this3.cancel();
-
-                  console.log(_this3.comments);
+                  var pushData = arr1[0].subcomments;
+                  pushData.unshift(response.data.blog);
+                  _this3.replay_content = '';
+                  _this3.replay_us_name = '';
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 3:
+              case 2:
               case "end":
                 return _context2.stop();
             }
@@ -213,7 +217,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     chatVisible: function chatVisible(id) {
-      this.isVisible = id;
+      this.comment.sub_comment_id = id, this.isVisible = id;
     },
     cancel: function cancel() {
       this.comment.content = '';
@@ -1566,8 +1570,9 @@ var render = function () {
                                 on: {
                                   submit: function ($event) {
                                     $event.preventDefault()
-                                    return _vm.replyComment(
-                                      comment.principal.id
+                                    return _vm.replyComment.apply(
+                                      null,
+                                      arguments
                                     )
                                   },
                                 },
@@ -1588,7 +1593,7 @@ var render = function () {
                                             on: {
                                               submit: function ($event) {
                                                 $event.preventDefault()
-                                                return _vm.create.apply(
+                                                return _vm.replyComment.apply(
                                                   null,
                                                   arguments
                                                 )
@@ -1608,9 +1613,9 @@ var render = function () {
                                                     {
                                                       name: "model",
                                                       rawName: "v-model",
-                                                      value: comment.us_name,
+                                                      value: _vm.replay_us_name,
                                                       expression:
-                                                        "comment.us_name",
+                                                        "replay_us_name",
                                                     },
                                                   ],
                                                   staticClass: "form-control",
@@ -1619,7 +1624,7 @@ var render = function () {
                                                     id: "floatingInput",
                                                   },
                                                   domProps: {
-                                                    value: comment.us_name,
+                                                    value: _vm.replay_us_name,
                                                   },
                                                   on: {
                                                     input: function ($event) {
@@ -1628,11 +1633,8 @@ var render = function () {
                                                       ) {
                                                         return
                                                       }
-                                                      _vm.$set(
-                                                        comment,
-                                                        "us_name",
+                                                      _vm.replay_us_name =
                                                         $event.target.value
-                                                      )
                                                     },
                                                   },
                                                 }),
@@ -1658,9 +1660,9 @@ var render = function () {
                                                     {
                                                       name: "model",
                                                       rawName: "v-model",
-                                                      value: comment.content,
+                                                      value: _vm.replay_content,
                                                       expression:
-                                                        "comment.content",
+                                                        "replay_content",
                                                     },
                                                   ],
                                                   staticClass: "form-control",
@@ -1669,7 +1671,7 @@ var render = function () {
                                                     id: "floatingPassword",
                                                   },
                                                   domProps: {
-                                                    value: comment.content,
+                                                    value: _vm.replay_content,
                                                   },
                                                   on: {
                                                     input: function ($event) {
@@ -1678,11 +1680,8 @@ var render = function () {
                                                       ) {
                                                         return
                                                       }
-                                                      _vm.$set(
-                                                        comment,
-                                                        "content",
+                                                      _vm.replay_content =
                                                         $event.target.value
-                                                      )
                                                     },
                                                   },
                                                 }),
@@ -1715,7 +1714,7 @@ var render = function () {
                                             "btn btn-primary btn-sm shadow-none",
                                           attrs: { type: "submit" },
                                         },
-                                        [_vm._v("Post comment")]
+                                        [_vm._v("Post replay")]
                                       ),
                                       _vm._v(" "),
                                       _c(
